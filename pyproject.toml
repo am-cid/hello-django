@@ -1,0 +1,11 @@
+[project]
+name = "hello-django"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "dj-database-url>=2.3.0",
+    "django>=5.1.4",
+    "python-decouple>=3.8",
+]
