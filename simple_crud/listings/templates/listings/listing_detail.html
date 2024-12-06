@@ -1,0 +1,7 @@
+<h1>{{ listing.name }}</h1>
+<p><strong>Seller:</strong> {{ listing.seller }} (<a href="{{ listing.seller_url }}" target="_blank">{{ listing.seller_url }}</a>)</p>
+<p><strong>Price:</strong> ${{ listing.price }}</p>
+<p><strong>Description:</strong> {{ listing.description }}</p>
+<a href="{% url 'listing_update' listing.pk %}">Edit</a>
+<a href="{% url 'listing_delete' listing.pk %}">Delete</a>
+<a href="{% url 'listing_list' %}">Back to Listings</a>
