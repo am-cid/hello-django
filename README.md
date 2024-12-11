@@ -1,5 +1,5 @@
 # hello-django
-simple crud in django
+simple crud in django. simple marketplace with users and listings.
 
 # Setup
 ## Prerequisites: Install `uv`
@@ -39,9 +39,14 @@ assign `SECRET_KEY` since others have sensible defaults. It can be any string
     `ALLOWED_HOST` is a csv. You usually can just leave `DATABASE_URL` blank
     so it uses sqlite but only if where you are deploying to supports it.
 
-4. Run server
+4. Run migrations to create tables
     ```bash
     cd simple_crud
+    python manage.py migrate
+    ```
+
+4. Run server
+    ```bash
     python manage.py runserver
     ```
 
