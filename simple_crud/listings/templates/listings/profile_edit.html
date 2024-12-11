@@ -1,0 +1,37 @@
+{% extends "listings/base.html" %}
+
+{% block content %}
+<h1>Edit {{ profile_user.username }}'s Profile</h1>
+<form method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  {% if form.picture and form.picture.value.url %}
+  <div class="field-wrapper">
+      <img src={{ form.picture.value.url }}
+      alt="Profile Picture" 
+      style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;"
+      />
+  </div>
+  <div class="field-wrapper">
+      <label for='id_remove_picture'> Remove </label>
+      {{ form.remove_picture }}
+  </div>
+  <div class="field-wrapper">
+      <label for='id_picture'> Change: </label>
+      {{ form.picture }}
+  </div>
+  {% else %}
+  <div class="field-wrapper">
+      {{ form.picture.label_tag }} {{ form.picture }}
+  </div>
+  {% endif %}
+  <div class="field-wrapper">
+      {{ form.bio.label_tag }} {{ form.bio }}
+  </div>
+  <div class="field-wrapper">
+      {{ form.link.label_tag }} {{ form.link }}
+  </div>
+  <button type="submit">Save Changes</button>
+</form>
+
+<a href="{% url 'profile' profile_user.username %}">Back to Profile</a>
+{% endblock %}

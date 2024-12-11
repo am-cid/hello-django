@@ -47,6 +47,20 @@ class ProfileForm(forms.ModelForm):
     picture = forms.ImageField(
         label="Profile Picture", required=False, widget=forms.FileInput
     )
+    remove_picture = forms.BooleanField(required=False)
+
     class Meta:
         model = Profile
         fields = ["bio", "link", "picture"]
+
+    def save(self, commit=True):
+        instance = super(ProfileForm, self).save(commit=False)
+        if self.cleaned_data.get("remove_picture"):
+            try:
+                os.unlink(instance.picture.path)
+            except OSError:
+                pass
+            instance.picture = None
+        if commit:
+            instance.save()
+        return instance
