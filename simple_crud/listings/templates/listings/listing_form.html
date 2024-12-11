@@ -1,7 +1,17 @@
-<h1>Create/Edit Listing</h1>
+{% extends "listings/base.html" %}
+
+{% block content %}
+<h1>
+    {% if form.instance.pk %}
+        Edit Listing
+    {% else %}
+        Create New Listing
+    {% endif %}
+</h1>
 <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save</button>
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Save</button>
 </form>
-<a href="{% url 'listing_list' %}">Cancel</a>
+<a href="{% url 'home' %}">Back to Home</a>
+{% endblock %}
