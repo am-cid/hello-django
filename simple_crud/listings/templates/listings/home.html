@@ -1,4 +1,5 @@
 {% extends "listings/base.html" %}
+{% load highlight %}
 
 {% block content %}
 <h1>All Listings</h1>
@@ -15,9 +16,12 @@
   {% for listing in listings %}
   <li>
     <strong>
-        <a href="{% url 'listing_detail' listing.pk %}">{{ listing.name }}</a>
-    </strong> - ${{ listing.price }}
-    by <a href="{% url 'profile' listing.seller.username %}">{{ listing.seller.username }}</a>
+      <a href="{% url 'listing_detail' listing.pk %}">{{ listing.name|highlight:query  }}</a>
+    </strong>
+    - ${{ listing.price }} by 
+    <a href="{% url 'profile' listing.seller.username %}">{{ listing.seller.username }}</a>
+    <br />
+    {{ listing.description|highlight:query }}
     <br />
     {% if user.is_authenticated and user == listing.seller %}
       <a href="{% url 'listing_update' listing.pk %}">Edit</a> |
