@@ -1,0 +1,23 @@
+{% extends "listings/base.html" %}
+
+{% block content %}
+<h1>All Listings</h1>
+<ul>
+  {% for listing in listings %}
+  <li>
+    <strong>
+        <a href="{% url 'listing_detail' listing.pk %}">{{ listing.name }}</a>
+    </strong> - ${{ listing.price }}
+    by <a href="{% url 'profile' listing.seller.username %}">{{ listing.seller.username }}</a>
+    <br />
+    {% if user.is_authenticated and user == listing.seller %}
+      <a href="{% url 'listing_update' listing.pk %}">Edit</a> |
+      <a href="{% url 'listing_delete' listing.pk %}">Delete</a>
+    {% endif %}
+  </li><br>
+  {% endfor %}
+</ul>
+{% if user.is_authenticated %}
+    <a href="{% url 'listing_create' %}">Create New Listing</a>
+{% endif %}
+{% endblock %}

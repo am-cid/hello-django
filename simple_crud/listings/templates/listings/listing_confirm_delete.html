@@ -1,6 +1,11 @@
-<h1>Are you sure you want to delete the listing for "{{ listing.name }}"?</h1>
-<form method='post'>
-    {% csrf_token %}
-    <button type="submit">Yes, Delete</button>
+{% extends "listings/base.html" %}
+
+{% block content %}
+<h1>Confirm Delete</h1>
+<p>Are you sure you want to delete the listing "{{ listing.name }}"?</p>
+<form method="post">
+  {% csrf_token %}
+  <button type="submit">Yes, Delete</button>
 </form>
-<a href="{% url 'listing_list' %}"> Cancel</a>
+<a href="{% url 'home' %}">Cancel</a>
+{% endblock %}

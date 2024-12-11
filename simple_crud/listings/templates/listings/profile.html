@@ -1,0 +1,26 @@
+{% extends "listings/base.html" %}
+
+{% block content %}
+<h1>{{ profile_user.username }}</h1>
+<p><strong>Bio:</strong> {{ profile_user.profile.bio }}</p>
+<p><strong>Link:</strong> <a href="{{ profile_user.profile.link }}">{{ profile_user.profile.link }}</a></p>
+
+<h2>Listings by {{ profile_user.username }}</h2>
+<ul>
+  {% if listings %}
+    {% for listing in listings %}
+    <li>
+      <strong>
+        <a href="{% url 'listing_detail' listing.pk %}">{{ listing.name }}</a>
+      </strong> - ${{ listing.price }}
+      <br />
+      <a href="{% url 'listing_update' listing.pk %}">Edit</a> |
+      <a href="{% url 'listing_delete' listing.pk %}">Delete</a>
+    </li><br>
+    {% endfor %}
+  {% else %}
+    <p>No listings created...</p>
+  {% endif %}
+</ul>
+<a href="{% url 'listing_create' %}">Create New Listing</a>
+{% endblock %}
