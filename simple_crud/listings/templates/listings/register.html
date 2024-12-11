@@ -2,12 +2,20 @@
 
 {% block content %}
 <h1>Register</h1>
-<form method="post">
+<form method="post" enctype="multipart/form-data">
   {% csrf_token %}
   <h2>User Info</h2>
   {{ user_form.as_p }}
   <h2>Profile Info</h2>
-  {{ profile_form.as_p }}
+  <div class="field-wrapper">
+      {{ profile_form.picture.label_tag }} {{ profile_form.picture }}
+  </div>
+  <div class="field-wrapper">
+      {{ profile_form.bio.label_tag }} {{ profile_form.bio }}
+  </div>
+  <div class="field-wrapper">
+      {{ profile_form.link.label_tag }} {{ profile_form.link }}
+  </div>
   <button type="submit">Register</button>
 </form>
 
