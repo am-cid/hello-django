@@ -37,7 +37,7 @@ def listing_detail(request: HttpRequest, pk: int) -> HttpResponse:
 @login_required
 def listing_create(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
-        form = ListingForm(request.POST)
+        form = ListingForm(request.POST, request.FILES)
         if form.is_valid():
             listing = form.save(commit=False)
             listing.seller = request.user
@@ -52,7 +52,7 @@ def listing_create(request: HttpRequest) -> HttpResponse:
 def listing_update(request: HttpRequest, pk: int) -> HttpResponse:
     listing = get_object_or_404(Listing, pk=pk, seller=request.user)
     if request.method == "POST":
-        form = ListingForm(request.POST, instance=listing)
+        form = ListingForm(request.POST, request.FILES, instance=listing)
         if form.is_valid():
             form.save()
             return redirect("home")
@@ -73,7 +73,7 @@ def listing_delete(request: HttpRequest, pk: int) -> HttpResponse:
 def register(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         user_form = UserRegistrationForm(request.POST)
-        profile_form = ProfileForm(request.POST)
+        profile_form = ProfileForm(request.POST, request.FILES)
         if user_form.is_valid() and profile_form.is_valid():
             user = user_form.save()
             user.set_password(user_form.cleaned_data["password"])
