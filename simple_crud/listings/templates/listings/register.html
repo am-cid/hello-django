@@ -1,0 +1,23 @@
+{% extends "listings/base.html" %}
+
+{% block content %}
+<h1>Register</h1>
+<form method="post">
+  {% csrf_token %}
+  <h2>User Info</h2>
+  {{ user_form.as_p }}
+  <h2>Profile Info</h2>
+  {{ profile_form.as_p }}
+  <button type="submit">Register</button>
+</form>
+
+{% if messages %}
+<ul>
+    {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<a href="{% url 'home' %}">Back to Home</a>
+{% endblock %}
