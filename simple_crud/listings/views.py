@@ -93,10 +93,34 @@ def register(request: HttpRequest) -> HttpResponse:
     )
 
 
+@login_required
+def edit_profile(request, username):
+    profile_user = get_object_or_404(User, username=username)
+    if request.user != profile_user:
+        messages.error(request, "You can only edit your own profile.")
+        return redirect("profile", username=request.user.username)
+
+    if request.method == "POST":
+        profile = profile_user.profile
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Profile updated successfully!")
+            return redirect("profile", username=profile_user.username)
+    else:
+        form = ProfileForm(instance=profile_user.profile)
+
+    return render(
+        request,
+        "listings/profile_edit.html",
+        {"form": form, "profile_user": profile_user},
+    )
+
+
 def login_view(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
-        username = request.POST.get("username")
         password = request.POST.get("password")
+        username = request.POST.get("username")
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
