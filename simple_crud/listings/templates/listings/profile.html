@@ -2,8 +2,21 @@
 
 {% block content %}
 <h1>{{ profile_user.username }}</h1>
+{% if profile_user.profile.picture %}
+  <img src="{{ profile_user.profile.picture.url }}"
+  alt="Profile Picture"
+  style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;"
+  >
+{% else %}
+  <p>No profile picture uploaded.</p>
+{% endif %}
+
 <p><strong>Bio:</strong> {{ profile_user.profile.bio }}</p>
 <p><strong>Link:</strong> <a href="{{ profile_user.profile.link }}">{{ profile_user.profile.link }}</a></p>
+
+{% if user.is_authenticated and user == profile_user %}
+  <p><a href="{% url 'profile_edit' profile_user.username %}">Edit Profile</a></p>
+{% endif %}
 
 <h2>Listings by {{ profile_user.username }}</h2>
 <ul>
@@ -14,13 +27,16 @@
         <a href="{% url 'listing_detail' listing.pk %}">{{ listing.name }}</a>
       </strong> - ${{ listing.price }}
       <br />
-      <a href="{% url 'listing_update' listing.pk %}">Edit</a> |
-      <a href="{% url 'listing_delete' listing.pk %}">Delete</a>
-    </li><br>
+      {% if user.is_authenticated and user == listing.seller %}
+        <a href="{% url 'listing_update' listing.pk %}">Edit</a> |
+        <a href="{% url 'listing_delete' listing.pk %}">Delete</a>
+      {% endif %}
+    </li><br />
     {% endfor %}
   {% else %}
     <p>No listings created...</p>
   {% endif %}
 </ul>
+
 <a href="{% url 'listing_create' %}">Create New Listing</a>
 {% endblock %}

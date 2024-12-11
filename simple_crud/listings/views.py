@@ -37,7 +37,7 @@ def listing_detail(request: HttpRequest, pk: int) -> HttpResponse:
 @login_required
 def listing_create(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
-        form = ListingForm(request.POST)
+        form = ListingForm(request.POST, request.FILES)
         if form.is_valid():
             listing = form.save(commit=False)
             listing.seller = request.user
@@ -52,7 +52,7 @@ def listing_create(request: HttpRequest) -> HttpResponse:
 def listing_update(request: HttpRequest, pk: int) -> HttpResponse:
     listing = get_object_or_404(Listing, pk=pk, seller=request.user)
     if request.method == "POST":
-        form = ListingForm(request.POST, instance=listing)
+        form = ListingForm(request.POST, request.FILES, instance=listing)
         if form.is_valid():
             form.save()
             return redirect("home")
@@ -73,7 +73,7 @@ def listing_delete(request: HttpRequest, pk: int) -> HttpResponse:
 def register(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         user_form = UserRegistrationForm(request.POST)
-        profile_form = ProfileForm(request.POST)
+        profile_form = ProfileForm(request.POST, request.FILES)
         if user_form.is_valid() and profile_form.is_valid():
             user = user_form.save()
             user.set_password(user_form.cleaned_data["password"])
@@ -93,10 +93,33 @@ def register(request: HttpRequest) -> HttpResponse:
     )
 
 
+@login_required
+def edit_profile(request, username):
+    profile_user = get_object_or_404(User, username=username)
+    if request.user != profile_user:
+        messages.error(request, "You can only edit your own profile.")
+        return redirect("profile", username=request.user.username)
+
+    if request.method == "POST":
+        profile = profile_user.profile
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect("profile", username=profile_user.username)
+    else:
+        form = ProfileForm(instance=profile_user.profile)
+
+    return render(
+        request,
+        "listings/profile_edit.html",
+        {"form": form, "profile_user": profile_user},
+    )
+
+
 def login_view(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
-        username = request.POST.get("username")
         password = request.POST.get("password")
+        username = request.POST.get("username")
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
