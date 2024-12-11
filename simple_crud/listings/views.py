@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -10,8 +11,14 @@ from .models import Listing
 
 
 def home(request: HttpRequest) -> HttpResponse:
-    listings = Listing.objects.all()
-    return render(request, "listings/home.html", {"listings": listings})
+    query = request.GET.get("q", "")
+    if query:
+        listings = Listing.objects.filter(
+            Q(name__icontains=query) | Q(description__icontains=query)
+        )
+    else:
+        listings = Listing.objects.all()
+    return render(request, "listings/home.html", {"listings": listings, "query": query})
 
 
 def profile(request: HttpRequest, username: str) -> HttpResponse:
