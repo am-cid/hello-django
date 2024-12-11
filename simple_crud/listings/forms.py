@@ -19,6 +19,9 @@ class UserRegistrationForm(forms.ModelForm):
 
 
 class ProfileForm(forms.ModelForm):
+    picture = forms.ImageField(
+        label="Profile Picture", required=False, widget=forms.FileInput
+    )
     class Meta:
         model = Profile
-        fields = ["bio", "link"]
+        fields = ["bio", "link", "picture"]
