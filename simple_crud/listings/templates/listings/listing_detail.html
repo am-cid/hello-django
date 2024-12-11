@@ -2,9 +2,29 @@
 
 {% block content %}
   <h1>{{ listing.name }}</h1>
+  {% if listing.picture %}
+    <img src="{{ listing.picture.url }}" 
+    alt="Profile Picture"
+    style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;"
+    />
+  {% endif %}
+
   <p><strong>Seller:</strong> <a href="{% url 'profile' listing.seller.username %}">{{ listing.seller.username }}</a></p>
+  {% if listing.seller.profile.picture %}
+    <img src="{{ listing.seller.profile.picture.url }}"
+    alt="Profile Picture"
+    style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;"
+    >
+  {% endif %}
+
   <p><strong>Price:</strong> ${{ listing.price }}</p>
   <p><strong>Description:</strong> {{ listing.description }}</p>
-  <p><strong>Seller URL:</strong> <a href="{{ listing.seller_url }}">{{ listing.seller_url }}</a></p>
+  <p><strong>Listing URL:</strong> <a href="{{ listing.seller_url }}">{{ listing.seller_url }}</a></p>
+
+  {% if user.is_authenticated and user == listing.seller %}
+    <a href="{% url 'listing_update' listing.pk %}">Edit</a> |
+    <a href="{% url 'listing_delete' listing.pk %}">Delete</a> |
+  {% endif %}
+
   <a href="{% url 'home' %}">Back to Home</a>
 {% endblock %}
