@@ -1,0 +1,14 @@
+{% extends "listings/base.html" %}
+
+{% block content %}
+<h1 class="text-4xl font-bold text-gray-800 mb-2 mt-24">PLM Bentambayan</h1>
+<p class="text-lg text-gray-600 mb-8">Your benta starts here!</p>
+
+<!-- Illustration -->
+<img src="{% static 'images/PLM_Bentambayan_Logo.png' %}" alt="Storefront Illustration" class="w-full max-w-md mx-auto mb-8">
+
+<!-- Call-to-action Button -->
+<a href="{% url 'login' %}" class="bg-indigo-600 text-white font-semibold py-2 px-6 rounded hover:bg-indigo-700 transition">
+  Start your benta now!
+</a>
+{% endblock %}

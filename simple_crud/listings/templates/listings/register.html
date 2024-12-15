@@ -1,31 +1,69 @@
 {% extends "listings/base.html" %}
+{% load static %} 
 
 {% block content %}
-<h1>Register</h1>
-<form method="post" enctype="multipart/form-data">
-  {% csrf_token %}
-  <h2>User Info</h2>
-  {{ user_form.as_p }}
-  <h2>Profile Info</h2>
-  <div class="field-wrapper">
-      {{ profile_form.picture.label_tag }} {{ profile_form.picture }}
-  </div>
-  <div class="field-wrapper">
-      {{ profile_form.bio.label_tag }} {{ profile_form.bio }}
-  </div>
-  <div class="field-wrapper">
-      {{ profile_form.link.label_tag }} {{ profile_form.link }}
-  </div>
-  <button type="submit">Register</button>
-</form>
+<div>
+    <!-- Back to Home -->
+    <div class="text-center mt-6">
+        <a href="{% url 'home' %}" class="text-indigo-600 hover:underline">Back to Home</a>
+    </div>
+    
+    <!-- Logo -->
+    <img src="{% static 'images/PLM_Bentambayan_Logo.png' %}" alt="PLM Bentambayan Logo" class="w-48 mx-auto mb-6">
 
-{% if messages %}
-<ul>
-    {% for message in messages %}
-        <li class="{{ message.tags }}">{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
+    <!-- Heading -->
+    <h1 class="text-2xl font-bold text-gray-800 mb-2 text-center">Register an account!</h1>
+    <p class="text-sm text-gray-600 mb-6 text-center">Start your benta at PLM Bentambayan!</p>
 
-<a href="{% url 'home' %}">Back to Home</a>
+    <!-- Form -->
+    <div class="shadow-md rounded px-8 pt-6 pb-10 mb-20 mx-auto max-w-2xl">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- User Info -->
+            <h2 class="text-lg font-semibold mb-4 text-gray-800">User Info</h2>
+            <div class="mb-4">
+                {{ user_form.username.label_tag }}
+                {{ user_form.username }}
+            </div>
+            <div class="mb-4">
+                {{ user_form.password.label_tag }}
+                {{ user_form.password }}
+            </div>
+
+            <!-- Profile Info -->
+            <h2 class="text-lg font-semibold mb-4 text-gray-800">Profile Info</h2>
+            <div class="mb-4">
+                {{ profile_form.picture.label_tag }}
+                {{ profile_form.picture }}
+            </div>
+            <div class="mb-4">
+                {{ profile_form.bio.label_tag }}
+                {{ profile_form.bio }}
+            </div>
+            <div class="mb-4">
+                {{ profile_form.link.label_tag }}
+                {{ profile_form.link }}
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" class="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    Register
+                </button>
+            </div>
+        </form>
+
+        <!-- Messages -->
+        {% if messages %}
+        <ul class="mt-6">
+            {% for message in messages %}
+                <li class="text-sm text-green-600">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        
+    </div>
+</div>
 {% endblock %}
