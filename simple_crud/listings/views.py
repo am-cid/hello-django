@@ -9,6 +9,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from .forms import ListingForm, ProfileForm, UserRegistrationForm
 from .models import Listing
 
+def welcome(request: HttpRequest) -> HttpResponse:
+    return render(request, "listings/welcome.html")
 
 def home(request: HttpRequest) -> HttpResponse:
     query = request.GET.get("q", "")
