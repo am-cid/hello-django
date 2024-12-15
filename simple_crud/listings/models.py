@@ -7,6 +7,7 @@ class Profile(models.Model):
     bio = models.TextField(blank=True, null=True)
     link = models.URLField(blank=True, null=True)
     picture = models.ImageField(upload_to="profile_pics/", blank=True, null=True)
+    cover = models.ImageField(upload_to="profile_covers/", blank=True, null=True)
 
     def __str__(self) -> str:
         return self.user.username
