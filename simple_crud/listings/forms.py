@@ -34,14 +34,22 @@ class ListingForm(forms.ModelForm):
             instance.save()
         return instance
 
-
 class UserRegistrationForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput)
-
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'block w-full mt-1 border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500',
+            'placeholder': 'Enter your password'
+        })
+    )
     class Meta:
         model = User
         fields = ["username", "password"]
-
+        widgets = {
+            'username': forms.TextInput(attrs={
+                'class': 'block w-full mt-1 border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500',
+                'placeholder': 'Enter your username'
+            }),
+        }
 
 class ProfileForm(forms.ModelForm):
     picture = forms.ImageField(
@@ -52,7 +60,22 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ["bio", "link", "picture"]
-
+        widgets = {
+            'bio': forms.Textarea(attrs={
+                'class': 'block w-full mt-1 border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500',
+                'rows': 4,
+                'placeholder': 'Write something about yourself...'
+            }),
+            'link': forms.URLInput(attrs={
+                'class': 'block w-full mt-1 border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500',
+                'placeholder': 'https://example.com'
+            }),
+            'picture': forms.FileInput(attrs={
+                'class': 'hidden',
+                'id': 'id_picture'
+            }),
+        }
+    
     def save(self, commit=True):
         instance = super(ProfileForm, self).save(commit=False)
         if self.cleaned_data.get("remove_picture"):
@@ -64,3 +87,7 @@ class ProfileForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
+
+
+
+
