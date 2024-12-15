@@ -4,141 +4,182 @@
 
 <section class="container mx-auto px-8 py-7">
 
-  {% if user.is_authenticated  %}
-    <h2 class="text-2xl font-bold text-black leading-tight">
-      Your profile
-    </h2>
+  {% if user.is_authenticated %}
+  <h2 class="text-2xl font-bold text-black leading-tight">
+    Your profile
+  </h2>
   {% else %}
-    <h2 class="text-2xl font-bold text-black leading-tight">
-      {{ profile_user.username }} Page
-    </h2>
+  <h2 class="text-2xl font-bold text-black leading-tight">
+    {{ profile_user.username }} Page
+  </h2>
   {% endif %}
-  
-  <div class="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 border border-gray-300 rounded-2xl mt-4">
+
+  <div
+    class="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 border border-gray-300 rounded-2xl mt-4">
     <div class="relative md:w-full overflow-hidden">
-      <!-- Large Image -->
+      <!-- Cover Photo -->
+      {% if profile_user.profile.cover %}
       <img
         src="{{ profile_user.profile.cover.url }}"
         alt="profile-banner"
-        class="w-full h-60 object-cover rounded-lg"
-      />
-    
-      <!-- Smaller Image Overlay -->
-      <div class="absolute bottom-4 left-12 w-28 h-28 border-4 border-white rounded-lg overflow-hidden shadow-md">
+        class="w-full h-60 object-cover rounded-lg" />
+      {% else %}
+      <div
+        class="w-full h-60 bg-gray-300 rounded-lg flex items-center justify-center">
+        <span class="text-gray-500 text-sm">No Cover Image</span>
+      </div>
+      {% endif %}
+
+      <!-- Profile Pic -->
+      {% if profile_user.profile.picture %}
+      <div
+        class="absolute bottom-4 left-12 w-28 h-28 border-4 border-white rounded-lg overflow-hidden shadow-md">
         <img
           src="{{ profile_user.profile.picture.url }}"
           alt="profile-picture-small"
-          class="w-full h-full object-cover"
-        />
-      </div>      
+          class="w-full h-full object-cover" />
+      </div>
+      {% else %}
+      <div
+        class="absolute bottom-4 left-12 w-28 h-28 border-4 border-white rounded-lg overflow-hidden shadow-md bg-gray-300 flex items-center justify-center">
+        <!-- Person Icon SVG -->
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-12 h-12 text-gray-500"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round">
+          <path
+            d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"></path>
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+        </svg>
+      </div>
+      {% endif %}
+
     </div>
-    
+
     <div class="p-6">
       <div class="flex items-start w-full gap-3">
         <div>
           <h4 class="text-3xl font-bold leading-relaxed text-gray-900 mb-2">
             {{ profile_user.username }}
           </h4>
-          <a href="{{ profile_user.profile.link }}" class="block antialiased font-sans text-sm font-light leading-normal text-gray-600">
+          <a href="{{ profile_user.profile.link }}"
+            class="block antialiased font-sans text-sm font-light leading-normal text-gray-600">
             {{ profile_user.profile.link }}
           </a>
-          <p class="block antialiased font-sans text-sm font-light text-gray-600 mt-4">
+          <p
+            class="block antialiased font-sans text-sm font-light text-gray-600 mt-4">
             {{ profile_user.profile.bio }}
           </p>
         </div>
         {% if user.is_authenticated %}
-          <div class="ml-auto flex items-center">
-            <a
-              href="{% url 'profile_edit' profile_user.username %}"
-              class="inline-flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-700 font-medium text-sm rounded-lg hover:bg-gray-300 transition-all"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 3.487a2.25 2.25 0 013.182 3.182l-12 12a2.25 2.25 0 01-1.06.6l-4.5 1.125a.375.375 0 01-.455-.455l1.125-4.5a2.25 2.25 0 01.6-1.06l12-12zM15.75 5.25l3 3" />
-              </svg>
-              Edit Profile
-            </a>
-          </div>
+        <div class="ml-auto flex items-center">
+          <a
+            href="{% url 'profile_edit' profile_user.username %}"
+            class="inline-flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-700 font-medium text-sm rounded-lg hover:bg-gray-300 transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+              viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+              class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M16.862 3.487a2.25 2.25 0 013.182 3.182l-12 12a2.25 2.25 0 01-1.06.6l-4.5 1.125a.375.375 0 01-.455-.455l1.125-4.5a2.25 2.25 0 01.6-1.06l12-12zM15.75 5.25l3 3" />
+            </svg>
+            Edit Profile
+          </a>
+        </div>
         {% endif %}
       </div>
-      
+
     </div>
   </div>
 
   <!-- User Listings -->
   <div class="flex items-center justify-between mt-4">
     {% if user.is_authenticated %}
-      <h2 class="text-2xl font-bold text-black leading-tight">
-        Your product listings 
-      </h2>
-      <a 
-        href="{% url 'listing_create' %}" 
-        class="inline-flex items-center gap-2 px-4 py-2 bg-blue-500 text-white font-semibold text-sm rounded-lg hover:bg-blue-600 transition-all"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-        </svg>
-        Create New Listing
-      </a>
+    <h2 class="text-2xl font-bold text-black leading-tight">
+      Your product listings
+    </h2>
+    <a
+      href="{% url 'listing_create' %}"
+      class="inline-flex items-center gap-2 px-4 py-2 bg-blue-500 text-white font-semibold text-sm rounded-lg hover:bg-blue-600 transition-all">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+        stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M12 4.5v15m7.5-7.5h-15" />
+      </svg>
+      Create New Listing
+    </a>
     {% else %}
-      <h2 class="text-2xl font-bold text-black leading-tight">
-        Product Lists
-      </h2>
+    <h2 class="text-2xl font-bold text-black leading-tight">
+      Product Lists
+    </h2>
     {% endif %}
   </div>
-  
-  
+
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 mt-6">
     {% if listings %}
-      {% for listing in listings %}
-        <div class="relative flex flex-col md:flex-row w-full bg-white shadow-sm border border-slate-200 rounded-lg">
-          <div class="relative p-2.5 md:w-2/5 shrink-0 overflow-hidden">
-            <img
-              src="{{ listing.picture.url }}"
-              alt="listing-image"
-              class="h-full w-full rounded-md md:rounded-lg object-cover"
-            />
-          </div>
-          <div class="p-6">
-            <div class="mb-4 rounded-full bg-teal-600 py-0.5 px-2.5 text-xs text-white shadow-sm w-20 text-center">
-              ${{ listing.price }}
-            </div>
-            <h4 class="mb-2 text-slate-800 text-xl font-semibold">
-              <a href="{% url 'listing_detail' listing.pk %}" class="hover:underline">
-                {{ listing.name }}
-              </a>
-            </h4>
-            <p class="mb-8 text-slate-600 leading-normal font-light">
-              {{ listing.description|truncatewords:20 }}
-            </p>
-            <div class="flex items-center justify-between">
-              {% if user.is_authenticated and user == listing.seller %}
-                <div class="flex justify-end items-center gap-1 mt-4">
-                  <a href="{% url 'listing_update' listing.pk %}" class="flex items-center gap-2 px-3 py-1 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-600 transition-all">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 3.487a2.25 2.25 0 013.182 3.182l-12 12a2.25 2.25 0 01-1.06.6l-4.5 1.125a.375.375 0 01-.455-.455l1.125-4.5a2.25 2.25 0 01.6-1.06l12-12zM15.75 5.25l3 3" />
-                    </svg>
-                    Edit
-                  </a>
-                  <a href="{% url 'listing_delete' listing.pk %}" class="flex items-center gap-2 px-3 py-1 bg-red-500 text-white rounded-lg text-sm hover:bg-red-600 transition-all">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                    Delete
-                  </a>
-                </div>
-              {% endif %}
-            </div>
-          </div>
+    {% for listing in listings %}
+    <div
+      class="relative flex flex-col md:flex-row w-full bg-white shadow-sm border border-slate-200 rounded-lg">
+      <div class="relative p-2.5 md:w-2/5 shrink-0 overflow-hidden">
+        <img
+          src="{{ listing.picture.url }}"
+          alt="listing-image"
+          class="h-full w-full rounded-md md:rounded-lg object-cover" />
+      </div>
+      <div class="p-6">
+        <div
+          class="mb-4 rounded-full bg-teal-600 py-0.5 px-2.5 text-xs text-white shadow-sm w-20 text-center">
+          ${{ listing.price }}
         </div>
-      {% endfor %}
+        <h4 class="mb-2 text-slate-800 text-xl font-semibold">
+          <a href="{% url 'listing_detail' listing.pk %}"
+            class="hover:underline">
+            {{ listing.name }}
+          </a>
+        </h4>
+        <p class="mb-8 text-slate-600 leading-normal font-light">
+          {{ listing.description|truncatewords:20 }}
+        </p>
+        <div class="flex items-center justify-between">
+          {% if user.is_authenticated and user == listing.seller %}
+          <div class="flex justify-end items-center gap-1 mt-4">
+            <a href="{% url 'listing_update' listing.pk %}"
+              class="flex items-center gap-2 px-3 py-1 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-600 transition-all">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
+                fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M16.862 3.487a2.25 2.25 0 013.182 3.182l-12 12a2.25 2.25 0 01-1.06.6l-4.5 1.125a.375.375 0 01-.455-.455l1.125-4.5a2.25 2.25 0 01.6-1.06l12-12zM15.75 5.25l3 3" />
+              </svg>
+              Edit
+            </a>
+            <a href="{% url 'listing_delete' listing.pk %}"
+              class="flex items-center gap-2 px-3 py-1 bg-red-500 text-white rounded-lg text-sm hover:bg-red-600 transition-all">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
+                fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M6 18L18 6M6 6l12 12" />
+              </svg>
+              Delete
+            </a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
     {% else %}
-      <p class="text-center text-gray-500 italic opacity-70 mt-6">
-        No listings created
-      </p>
+    <p class="text-center text-gray-500 italic opacity-70 mt-6">
+      No listings created
+    </p>
     {% endif %}
   </div>
-  
-</section>
 
+</section>
 
 {% endblock %}
