@@ -8,31 +8,37 @@ from .models import Listing, Profile
 
 class ListingForm(forms.ModelForm):
     picture = forms.ImageField(
-        label="Listing Photo", required=False, widget=forms.FileInput
+        label="Listing Photo", required=False, widget=forms.FileInput(attrs={
+            'class': 'block w-full text-gray-600 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2'
+        })
     )
-    remove_picture = forms.BooleanField(required=False)
+    remove_picture = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={
+        'class': 'rounded border-gray-300 text-blue-600 focus:ring-blue-500'
+    }))
 
     class Meta:
         model = Listing
-        fields = [
-            "name",
-            "seller_url",
-            "description",
-            "price",
-            "picture",
-        ]
+        fields = ["name", "seller_url", "description", "price", "picture"]
+        widgets = {
+            "name": forms.TextInput(attrs={
+                "class": "block w-full mt-1 border border-gray-300 rounded-lg shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500",
+                "placeholder": "Enter product name"
+            }),
+            "seller_url": forms.URLInput(attrs={
+                "class": "block w-full mt-1 border border-gray-300 rounded-lg shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500",
+                "placeholder": "https://example.com"
+            }),
+            "description": forms.Textarea(attrs={
+                "class": "block w-full mt-1 border border-gray-300 rounded-lg shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500",
+                "rows": 4,
+                "placeholder": "Describe your product..."
+            }),
+            "price": forms.NumberInput(attrs={
+                "class": "block w-full mt-1 border border-gray-300 rounded-lg shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500",
+                "placeholder": "Enter price"
+            }),
+        }
 
-    def save(self, commit=True):
-        instance = super(ListingForm, self).save(commit=False)
-        if self.cleaned_data.get("remove_picture"):
-            try:
-                os.unlink(instance.picture.path)
-            except OSError:
-                pass
-            instance.picture = None
-        if commit:
-            instance.save()
-        return instance
 
 class UserRegistrationForm(forms.ModelForm):
     password = forms.CharField(
