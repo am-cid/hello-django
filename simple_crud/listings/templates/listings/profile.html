@@ -4,11 +4,10 @@
 
 <section class="container mx-auto px-8 py-7">
 
-  {% if user.is_authenticated and user == listing.seller %}
-    <div class="flex items-center justify-between">
-      <h2 class="text-2xl font-bold text-black leading-tight">
-        Your profile
-      </h2>
+  {% if user.is_authenticated  %}
+    <h2 class="text-2xl font-bold text-black leading-tight">
+      Your profile
+    </h2>
   {% else %}
     <h2 class="text-2xl font-bold text-black leading-tight">
       {{ profile_user.username }} Page
@@ -47,7 +46,7 @@
             {{ profile_user.profile.bio }}
           </p>
         </div>
-        {% if user.is_authenticated and user == profile_user %}
+        {% if user.is_authenticated %}
           <div class="ml-auto flex items-center">
             <a
               href="{% url 'profile_edit' profile_user.username %}"
@@ -67,7 +66,7 @@
 
   <!-- User Listings -->
   <div class="flex items-center justify-between mt-4">
-    {% if user.is_authenticated and user == listing.seller %}
+    {% if user.is_authenticated %}
       <h2 class="text-2xl font-bold text-black leading-tight">
         Your product listings 
       </h2>
