@@ -1,26 +1,69 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Simple CRUD</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-  <header>
-    <nav>
-      {% if user.is_authenticated %}
-        <p>Welcome, {{ user.username }}!</p>
-        <a href="{% url 'logout' %}">Logout</a>
-        <a href="{% url 'profile' user.username %}">My Profile</a>
-      {% else %}
-        <a href="{% url 'login' %}">Login</a>
-        <a href="{% url 'register' %}">Register</a>
-      {% endif %}
-      <a href="{% url 'home' %}">Home</a>
-    </nav>
-  </header>
-  <main>
+  <nav class="block px-24 py-2 mx-auto text-white bg-white shadow-md rounded-md lg:px-8 lg:py-3">
+    <div class="container flex flex-wrap items-center justify-between mx-auto text-slate-800">
+      <div class="flex flex-row gap-2">
+        <img src="{% static 'images/PLM_Bentambayan_Logo2.png' %}" alt="PLM Bentambayan Logo" class="w-10">
+        <a href="{% url 'home' %}"
+          class="cursor-pointer text-base text-slate-800 font-semibold">
+          PLM Bentambayan
+      </a>
+      </div>
+      
+      <div class="hidden lg:block">
+        <ul class="flex flex-col gap-2 mt-2 mb-4 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
+          {% if user.is_authenticated %}
+            <span class="text-xs text-slate-600">Hello, {{ user.username }}!</span>
+            <li
+              class="flex items-center p-1 text-sm gap-x-2 text-slate-600">
+              <a href="{% url 'profile' user.username %}" class="flex items-center">
+                Profile
+              </a>
+            </li>
+            <li
+              class="flex items-center p-1 text-sm gap-x-2 text-slate-600">
+              <a href="{% url 'logout' %}" class="flex items-center">
+                Logout
+              </a>
+            </li>
+          {% else %}
+            <li
+              class="flex items-center p-1 text-sm gap-x-2 text-slate-600">
+              <a href="{% url 'login' %}" class="flex items-center">
+                Login
+              </a>
+            </li>
+            <li
+              class="flex items-center p-1 text-sm gap-x-2 text-slate-600">
+              <a href="{% url 'register' %}" class="flex items-center">
+                Register
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+      <button
+        class="relative ml-auto h-6 max-h-[40px] w-6 max-w-[40px] select-none rounded-lg text-center align-middle text-xs font-medium uppercase text-inherit transition-all hover:bg-transparent focus:bg-transparent active:bg-transparent disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none lg:hidden"
+        type="button">
+        <span class="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </span>
+      </button>
+    </div>
+  </nav>
+  <main class="container mx-auto px-4 lg:px-8">
     {% block content %}{% endblock %}
-  </main>
+  </main>  
 </body>
 </html>
