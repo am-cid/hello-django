@@ -56,10 +56,14 @@ class ProfileForm(forms.ModelForm):
         label="Profile Picture", required=False, widget=forms.FileInput
     )
     remove_picture = forms.BooleanField(required=False)
+    cover = forms.ImageField(
+        label="Profile Cover", required=False, widget=forms.FileInput
+    )
+    remove_cover = forms.BooleanField(required=False)
 
     class Meta:
         model = Profile
-        fields = ["bio", "link", "picture"]
+        fields = ["bio", "link", "picture", "cover"]
         widgets = {
             'bio': forms.Textarea(attrs={
                 'class': 'block w-full mt-1 border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500',
@@ -74,8 +78,9 @@ class ProfileForm(forms.ModelForm):
                 'class': 'hidden',
                 'id': 'id_picture'
             }),
+            "cover": forms.FileInput(attrs={"class": "hidden", "id": "id_cover"}),
         }
-    
+
     def save(self, commit=True):
         instance = super(ProfileForm, self).save(commit=False)
         if self.cleaned_data.get("remove_picture"):
@@ -84,10 +89,12 @@ class ProfileForm(forms.ModelForm):
             except OSError:
                 pass
             instance.picture = None
+        if self.cleaned_data.get("remove_cover"):
+            try:
+                os.unlink(instance.cover.path)
+            except OSError:
+                pass
+            instance.cover = None
         if commit:
             instance.save()
         return instance
-
-
-
-
