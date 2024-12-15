@@ -1,30 +1,64 @@
 {% extends "listings/base.html" %}
 
 {% block content %}
-  <h1>{{ listing.name }}</h1>
-  {% if listing.picture %}
-    <img src="{{ listing.picture.url }}" 
-    alt="Profile Picture"
-    style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;"
-    />
-  {% endif %}
+<section class="container mx-auto px-6 py-6">
+  <!-- Back Button -->
+  <a href="{% url 'home' %}" class="text-gray-600 hover:text-black flex items-center mb-4">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+    </svg>
+    Back
+  </a>
 
-  <p><strong>Seller:</strong> <a href="{% url 'profile' listing.seller.username %}">{{ listing.seller.username }}</a></p>
-  {% if listing.seller.profile.picture %}
-    <img src="{{ listing.seller.profile.picture.url }}"
-    alt="Profile Picture"
-    style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;"
-    >
-  {% endif %}
+  <!-- Product Header -->
+  <div class="flex justify-between items-center">
+    <h1 class="text-4xl font-bold text-gray-900">{{ listing.name }}</h1>
+    {% if user.is_authenticated and user == listing.seller %}
+    <div class="flex gap-2">
+      <a href="{% url 'listing_update' listing.pk %}" class="inline-flex items-center gap-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 3.487a2.25 2.25 0 013.182 3.182l-12 12a2.25 2.25 0 01-1.06.6l-4.5 1.125a.375.375 0 01-.455-.455l1.125-4.5a2.25 2.25 0 01.6-1.06l12-12zM15.75 5.25l3 3" />
+        </svg>
+        Edit
+      </a>
+      <a href="{% url 'listing_delete' listing.pk %}" class="inline-flex items-center gap-1 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+        Delete
+      </a>
+    </div>
+    {% endif %}
+  </div>
 
-  <p><strong>Price:</strong> ${{ listing.price }}</p>
-  <p><strong>Description:</strong> {{ listing.description }}</p>
-  <p><strong>Listing URL:</strong> <a href="{{ listing.seller_url }}">{{ listing.seller_url }}</a></p>
+  <!-- Product Image -->
+  <div class="mt-4">
+    {% if listing.picture %}
+      <img src="{{ listing.picture.url }}" alt="{{ listing.name }}" class="w-full rounded-lg object-cover h-80">
+    {% else %}
+      <div class="w-full h-80 bg-gray-300 flex items-center justify-center rounded-lg">
+        <span class="text-gray-500 text-lg">No Image Available</span>
+      </div>
+    {% endif %}
+  </div>
 
-  {% if user.is_authenticated and user == listing.seller %}
-    <a href="{% url 'listing_update' listing.pk %}">Edit</a> |
-    <a href="{% url 'listing_delete' listing.pk %}">Delete</a> |
-  {% endif %}
+  <!-- Seller and Product Details -->
+  <div class="flex justify-between mt-4">
+    <div>
+      <p class="text-blue-600 text-lg font-semibold">
+        <a href="{% url 'profile' listing.seller.username %}">{{ listing.seller.username }}</a>
+      </p>
+      <p class="text-gray-500 italic mt-1">
+        <strong>Product Link:</strong>
+        <a href="{{ listing.seller_url }}" class="text-blue-500 hover:underline">{{ listing.seller_url }}</a>
+      </p>
+      <p class="text-gray-700 mt-4">{{ listing.description }}</p>
+    </div>
 
-  <a href="{% url 'home' %}">Back to Home</a>
+    <!-- Price -->
+    <div class="text-right">
+      <p class="text-xl font-bold text-gray-800">Php {{ listing.price }}</p>
+    </div>
+  </div>
+</section>
 {% endblock %}
