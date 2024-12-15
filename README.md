@@ -45,10 +45,15 @@ assign `SECRET_KEY` since others have sensible defaults. It can be any string
     python manage.py migrate
     ```
 
-4. Run server
+5. Run server
     ```bash
     python manage.py runserver
     ```
+    For production, collect static files before running the server:
+    ```bash
+    python manage.py collectstatic
+    ```
+
 
 ---
 
