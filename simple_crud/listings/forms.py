@@ -78,11 +78,7 @@ class ProfileForm(forms.ModelForm):
                 'class': 'hidden',
                 'id': 'id_picture'
             }),
-            # TODO: add widget for cover. prolly something like this(?):
-            # 'cover': forms.FileInput(attrs={
-            #     'class': 'hidden',
-            #     'id': 'id_cover'
-            # }),
+            "cover": forms.FileInput(attrs={"class": "hidden", "id": "id_cover"}),
         }
 
     def save(self, commit=True):
