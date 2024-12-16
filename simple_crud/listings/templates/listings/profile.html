@@ -77,19 +77,21 @@
           </p>
         </div>
         {% if user.is_authenticated %}
-        <div class="ml-auto flex items-center">
-          <a
-            href="{% url 'profile_edit' profile_user.username %}"
-            class="inline-flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-700 font-medium text-sm rounded-lg hover:bg-gray-300 transition-all">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-              viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-              class="w-5 h-5">
-              <path stroke-linecap="round" stroke-linejoin="round"
-                d="M16.862 3.487a2.25 2.25 0 013.182 3.182l-12 12a2.25 2.25 0 01-1.06.6l-4.5 1.125a.375.375 0 01-.455-.455l1.125-4.5a2.25 2.25 0 01.6-1.06l12-12zM15.75 5.25l3 3" />
-            </svg>
-            Edit Profile
-          </a>
-        </div>
+          {% if user == profile_user %}
+          <div class="ml-auto flex items-center">
+            <a
+              href="{% url 'profile_edit' profile_user.username %}"
+              class="inline-flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-700 font-medium text-sm rounded-lg hover:bg-gray-300 transition-all">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M16.862 3.487a2.25 2.25 0 013.182 3.182l-12 12a2.25 2.25 0 01-1.06.6l-4.5 1.125a.375.375 0 01-.455-.455l1.125-4.5a2.25 2.25 0 01.6-1.06l12-12zM15.75 5.25l3 3" />
+              </svg>
+              Edit Profile
+            </a>
+          </div>
+          {% endif %} 
         {% endif %}
       </div>
 
