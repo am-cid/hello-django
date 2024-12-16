@@ -31,7 +31,21 @@
         {{ form.name }}
       </div>
 
-      <!-- Image Upload with Preview -->
+      <!-- Existing Image with Remove Option -->
+      {% if form.instance.picture %}
+      <div>
+        <label class="block text-gray-700 font-medium mb-1">Existing Listing Photo</label>
+        <div class="flex items-center space-x-4">
+          <img src="{{ form.instance.picture.url }}" alt="Listing Photo" class="w-32 h-32 object-cover rounded-lg border border-gray-300">
+          <label for="id_remove_picture" class="inline-flex items-center">
+            {{ form.remove_picture }}
+            <span class="ml-2 text-sm text-gray-600">Remove this photo</span>
+          </label>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- New Image Upload with Preview -->
       <div>
         <label for="id_picture" class="block text-gray-700 font-medium mb-1">{{ form.picture.label }}</label>
         <input type="file" id="id_picture" name="picture" class="block w-full text-gray-600 border border-gray-300 rounded-lg p-2" onchange="previewImage(event)">

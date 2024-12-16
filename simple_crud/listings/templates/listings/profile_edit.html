@@ -29,7 +29,6 @@
             <img id="profileImagePreview" src="https://via.placeholder.com/150" alt="No Profile Picture"
               class="w-32 h-32 rounded-lg border border-gray-300 object-cover" />
           {% endif %}
-          
           <div>
             <label for="id_picture" class="block text-blue-500 cursor-pointer hover:underline">
               Change Picture
@@ -43,6 +42,35 @@
           <label for="id_remove_picture" class="inline-flex items-center gap-2">
             {{ form.remove_picture }}
             <span class="text-gray-600">Remove Current Picture</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Cover Photo -->
+      <div>
+        <label class="block text-gray-700 font-medium mb-2">Cover Photo</label>
+        <div class="flex flex-col gap-4">
+          {% if form.cover.value and form.cover.value.url %}
+            <img id="coverImagePreview" src="{{ form.cover.value.url }}" alt="Cover Photo"
+              class="w-full max-w-lg h-40 rounded-lg border border-gray-300 object-cover" />
+          {% else %}
+            <div class="w-full max-w-lg h-40 rounded-lg border border-gray-300 flex items-center justify-center bg-gray-100">
+              <span class="text-gray-500">No Cover Photo</span>
+            </div>
+          {% endif %}
+          <div>
+            <label for="id_cover" class="block text-blue-500 cursor-pointer hover:underline">
+              Change Cover Photo
+            </label>
+            {{ form.cover }}
+          </div>
+        </div>
+
+        <!-- Remove Cover Option -->
+        <div class="mt-4">
+          <label for="id_remove_cover" class="inline-flex items-center gap-2">
+            {{ form.remove_cover }}
+            <span class="text-gray-600">Remove Current Cover</span>
           </label>
         </div>
       </div>
@@ -74,15 +102,28 @@
 
 <!-- JavaScript for Image Preview -->
 <script>
-  const fileInput = document.getElementById('id_picture');
-  const imagePreview = document.getElementById('profileImagePreview');
-
-  fileInput.addEventListener('change', (event) => {
+  const profileInput = document.getElementById('id_picture');
+  const profilePreview = document.getElementById('profileImagePreview');
+  profileInput.addEventListener('change', (event) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = function(e) {
-        imagePreview.src = e.target.result;
+        profilePreview.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  const coverInput = document.getElementById('id_cover');
+  const coverPreview = document.getElementById('coverImagePreview');
+  coverInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        coverPreview.src = e.target.result;
+        coverPreview.classList.remove('hidden');
       };
       reader.readAsDataURL(file);
     }
