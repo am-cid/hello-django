@@ -1,37 +1,132 @@
 {% extends "listings/base.html" %}
 
 {% block content %}
-<h1>Edit {{ profile_user.username }}'s Profile</h1>
-<form method="POST" enctype="multipart/form-data">
-  {% csrf_token %}
-  {% if form.picture and form.picture.value.url %}
-  <div class="field-wrapper">
-      <img src={{ form.picture.value.url }}
-      alt="Profile Picture" 
-      style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;"
-      />
+<section class="container mx-auto px-6 py-6">
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-900">Edit Profile</h1>
+    <a href="{% url 'profile' profile_user.username %}" class="text-gray-600 hover:text-black flex items-center">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-1" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+      </svg>
+      Back to Profile
+    </a>
   </div>
-  <div class="field-wrapper">
-      <label for='id_remove_picture'> Remove </label>
-      {{ form.remove_picture }}
-  </div>
-  <div class="field-wrapper">
-      <label for='id_picture'> Change: </label>
-      {{ form.picture }}
-  </div>
-  {% else %}
-  <div class="field-wrapper">
-      {{ form.picture.label_tag }} {{ form.picture }}
-  </div>
-  {% endif %}
-  <div class="field-wrapper">
-      {{ form.bio.label_tag }} {{ form.bio }}
-  </div>
-  <div class="field-wrapper">
-      {{ form.link.label_tag }} {{ form.link }}
-  </div>
-  <button type="submit">Save Changes</button>
-</form>
 
-<a href="{% url 'profile' profile_user.username %}">Back to Profile</a>
+  <!-- Form -->
+  <form method="POST" enctype="multipart/form-data" class="bg-white shadow-lg rounded-lg p-6">
+    {% csrf_token %}
+    <div class="space-y-6">
+
+      <!-- Profile Picture -->
+      <div>
+        <label class="block text-gray-700 font-medium mb-2">Profile Picture</label>
+        <div class="flex items-center gap-4">
+          {% if form.picture.value and form.picture.value.url %}
+            <img id="profileImagePreview" src="{{ form.picture.value.url }}" alt="Profile Picture"
+              class="w-32 h-32 rounded-lg border border-gray-300 object-cover" />
+          {% else %}
+            <img id="profileImagePreview" src="https://via.placeholder.com/150" alt="No Profile Picture"
+              class="w-32 h-32 rounded-lg border border-gray-300 object-cover" />
+          {% endif %}
+          <div>
+            <label for="id_picture" class="block text-blue-500 cursor-pointer hover:underline">
+              Change Picture
+            </label>
+            {{ form.picture }}
+          </div>
+        </div>
+
+        <!-- Remove Picture Option -->
+        <div class="mt-4">
+          <label for="id_remove_picture" class="inline-flex items-center gap-2">
+            {{ form.remove_picture }}
+            <span class="text-gray-600">Remove Current Picture</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Cover Photo -->
+      <div>
+        <label class="block text-gray-700 font-medium mb-2">Cover Photo</label>
+        <div class="flex flex-col gap-4">
+          {% if form.cover.value and form.cover.value.url %}
+            <img id="coverImagePreview" src="{{ form.cover.value.url }}" alt="Cover Photo"
+              class="w-full max-w-lg h-40 rounded-lg border border-gray-300 object-cover" />
+          {% else %}
+            <div class="w-full max-w-lg h-40 rounded-lg border border-gray-300 flex items-center justify-center bg-gray-100">
+              <span class="text-gray-500">No Cover Photo</span>
+            </div>
+          {% endif %}
+          <div>
+            <label for="id_cover" class="block text-blue-500 cursor-pointer hover:underline">
+              Change Cover Photo
+            </label>
+            {{ form.cover }}
+          </div>
+        </div>
+
+        <!-- Remove Cover Option -->
+        <div class="mt-4">
+          <label for="id_remove_cover" class="inline-flex items-center gap-2">
+            {{ form.remove_cover }}
+            <span class="text-gray-600">Remove Current Cover</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Bio Field -->
+      <div>
+        <label for="id_bio" class="block text-gray-700 font-medium mb-1">{{ form.bio.label }}</label>
+        {{ form.bio }}
+      </div>
+
+      <!-- Link Field -->
+      <div>
+        <label for="id_link" class="block text-gray-700 font-medium mb-1">{{ form.link.label }}</label>
+        {{ form.link }}
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="mt-6 flex justify-end">
+      <button type="submit" class="inline-flex items-center gap-2 px-6 py-2 bg-blue-500 text-white font-semibold text-sm rounded-lg hover:bg-blue-600 transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.5v15m7.5-7.5h-15" />
+        </svg>
+        Save Changes
+      </button>
+    </div>
+  </form>
+</section>
+
+<!-- JavaScript for Image Preview -->
+<script>
+  const profileInput = document.getElementById('id_picture');
+  const profilePreview = document.getElementById('profileImagePreview');
+  profileInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        profilePreview.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  const coverInput = document.getElementById('id_cover');
+  const coverPreview = document.getElementById('coverImagePreview');
+  coverInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        coverPreview.src = e.target.result;
+        coverPreview.classList.remove('hidden');
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+</script>
 {% endblock %}

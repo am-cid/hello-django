@@ -133,4 +133,4 @@ def login_view(request: HttpRequest) -> HttpResponse:
 
 def logout_view(request: HttpRequest) -> HttpResponse:
     logout(request)
-    return redirect("home")
+    return redirect("welcome")

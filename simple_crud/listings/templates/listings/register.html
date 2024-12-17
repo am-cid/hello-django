@@ -9,93 +9,82 @@
     <!-- Heading -->
     <h1 class="text-2xl font-bold text-gray-800 mb-2 text-center">Register an account!</h1>
     <p class="text-sm text-gray-600 mb-6 text-center">Start your benta at PLM Bentambayan!</p>
-<!-- Form -->
-<form method="POST" enctype="multipart/form-data" class="space-y- mb-10">
-    {% csrf_token %}
 
-    <!-- Username and Password -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+    <!-- Form -->
+    <form method="POST" enctype="multipart/form-data" class="space-y-8 mb-10">
+        {% csrf_token %}
+
+        <!-- Username and Password -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+            <div>
+                <label for="id_username" class="block text-sm font-medium text-gray-700">Username</label>
+                {{ user_form.username }}
+            </div>
+            <div>
+                <label for="id_password" class="block text-sm font-medium text-gray-700">Password</label>
+                {{ user_form.password }}
+            </div>
+        </div>
+
+        <!-- Website or Market Page -->
+        <div class="mb-4">
+            <label for="id_link" class="block text-sm font-medium text-gray-700">Website or Market Page</label>
+            {{ profile_form.link }}
+        </div>
+
+        <!-- Profile Bio -->
+        <div class="mb-4">
+            <label for="id_bio" class="block text-sm font-medium text-gray-700">Profile Bio</label>
+            {{ profile_form.bio }}
+            <p class="text-sm text-gray-500 mt-1">Brief description for your profile. URLs are hyperlinked.</p>
+        </div>
+
+        <!-- Profile Photo -->
         <div>
-            <label for="id_username" class="block text-sm font-medium text-gray-700">Username</label>
-            {{ user_form.username }}
+            <label for="id_picture" class="block text-sm font-medium text-gray-700 mb-2">Profile Photo</label>
+            <div class="flex items-center space-x-4 mb-4">
+                <input type="file" id="id_picture" name="picture" onchange="previewImage(event, 'profilePreview')">
+                <img id="profilePreview" src="https://via.placeholder.com/150" alt="Profile Photo Preview" 
+                     class="w-32 h-32 object-cover rounded-lg border border-gray-300 hidden">
+            </div>
         </div>
+
+        <!-- Cover Photo -->
         <div>
-            <label for="id_password" class="block text-sm font-medium text-gray-700">Password</label>
-            {{ user_form.password }}
+            <label for="id_cover" class="block text-sm font-medium text-gray-700 mb-2">Cover Photo</label>
+            <div class="flex items-center space-x-4">
+                <input type="file" id="id_cover" name="cover" onchange="previewImage(event, 'coverPreview')">
+                <img id="coverPreview" src="https://via.placeholder.com/300x100" alt="Cover Photo Preview" 
+                     class="w-full max-w-md h-24 object-cover rounded-lg border border-gray-300 hidden">
+            </div>
         </div>
-    </div>
 
-    <!-- Website or Market Page -->
-    <div class="mb-4">
-        <label for="id_link" class="block text-sm font-medium text-gray-700">Website or Market Page</label>
-        {{ profile_form.link }}
-    </div>
-
-    <!-- Profile Bio -->
-    <div class="mb-4">
-        <label for="id_bio" class="block text-sm font-medium text-gray-700">Profile Bio</label>
-        {{ profile_form.bio }}
-        <p class="text-sm text-gray-500 mt-1">Brief description for your profile. URLs are hyperlinked.</p>
-    </div>
-
-    <!-- Profile Photo -->
-    <div>
-        <label for="id_picture" class="block text-sm font-medium text-gray-700 mb-2">Photo</label>
-        <div class="flex items-center space-x-4">
-            <img src="https://via.placeholder.com/50" alt="Profile Placeholder" class="w-12 h-12 rounded-full">
-            {{ profile_form.picture }}
+        <!-- Submit Button -->
+        <div class="text-center">
+            <button type="submit" class="mt-4 w-full rounded-md py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:bg-indigo-700 focus:ring focus:ring-indigo-300" 
+                style="background-color: #4F46E5;">
+                Register now!
+            </button>
         </div>
-    </div>
+    </form>
+</div>
 
-    <!-- Cover Photo -->
-    <div>
-        <label for="id_cover" class="block text-sm font-medium text-gray-700 mb-2">Cover photo</label>
-        <div class="border-2 border-dashed rounded-lg p-6 text-center">
-            <svg class="mx-auto h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 16v-4a4 4 0 014-4h10a4 4 0 014 4v4m-7-5l3 3m0 0l-3 3m3-3H9" />
-            </svg>
-            <label for="id_cover" class="cursor-pointer text-indigo-600 hover:underline">
-                Upload a file
-            </label>
-            <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
-            <input type="file" id="id_cover" name="cover" class="hidden">
-        </div>
-    </div>
+<!-- JavaScript for Image Preview -->
+<script>
+    function previewImage(event, previewId) {
+        const input = event.target;
+        const preview = document.getElementById(previewId);
 
-    <!-- Submit Button -->
-    <div class="text-center">
-        <button type="submit" class="mt-4 w-full rounded-md py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md focus:shadow-none active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" 
-            style="background-color: #4F46E5; color: white; border-color: transparent;">
-            Register now!
-        </button>
-       
-    </div>
-</form>
-  </div>
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
 
-<!-- <form method="post" enctype="multipart/form-data">
-  {% csrf_token %}
-  <h2>User Info</h2>
-  {{ user_form.as_p }}
-  <h2>Profile Info</h2>
-  <div class="field-wrapper">
-      {{ profile_form.picture.label_tag }} {{ profile_form.picture }}
-  </div>
-  <div class="field-wrapper">
-      {{ profile_form.bio.label_tag }} {{ profile_form.bio }}
-  </div>
-  <div class="field-wrapper">
-      {{ profile_form.link.label_tag }} {{ profile_form.link }}
-  </div>
-  <button type="submit">Register</button>
-</form> -->
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.classList.remove("hidden");
+            };
 
-{% if messages %}
-<ul>
-    {% for message in messages %}
-        <li class="{{ message.tags }}">{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
 {% endblock %}
