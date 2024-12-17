@@ -39,6 +39,18 @@ class ListingForm(forms.ModelForm):
             }),
         }
 
+    def save(self, commit=True):
+        instance = super(ListingForm, self).save(commit=False)
+        if self.cleaned_data.get("remove_picture"):
+            try:
+                os.unlink(instance.picture.path)
+            except OSError:
+                pass
+            instance.picture = None
+        if commit:
+            instance.save()
+        return instance
+
 
 class UserRegistrationForm(forms.ModelForm):
     password = forms.CharField(
